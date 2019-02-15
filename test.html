@@ -1,5 +1,48 @@
 <html>
 	<head>
+		<link href="https://fonts.googleapis.com/css?family=Press+Start+2P" rel="stylesheet"> 
+		<link href="https://unpkg.com/nes.css/css/nes.min.css" rel="stylesheet" />
+		<style>
+html, body, pre, code, kbd, samp {
+	font-family:  'Press Start 2P', cursive;
+}
+
+body > h1 {
+	text-align: center;
+}
+
+section {
+	margin: auto;
+	max-width: 1300px;
+	text-align: center;
+}
+
+div.containers {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+}
+
+div.containers.draw {
+	display: flex;
+	flex-direction: column;
+}
+
+div.containers.config {
+	display: flex;
+	flex-flow: row;
+	flex-direction: column nowrap;
+	align-items: center;
+}
+
+div.buttons {
+	display: flex;
+	flex-direction: row; 
+	flex-wrap: wrap;
+	align-items: center;
+}
+
+		</style>
 		<script type="text/javascript" language="javascript">
 			window.onload = function() {
 				// Box width
@@ -219,7 +262,7 @@
 							context.lineTo(direction_map.dest[i][0] * tileWidth + 3 * tileWidth / 4, direction_map.dest[i][1] * tileHeight + tileHeight / 2);
 							context.strokeStyle = "black";
 							context.stroke();
-							
+
 							context.beginPath();
 							context.arc(direction_map.dest[i][0] * tileWidth + tileWidth / 2 + tileWidth / 4, direction_map.dest[i][1] * tileHeight + tileHeight / 2, tileWidth / 8, 0, 2 * Math.PI, false);
 							context.fillStyle = 'orange';
@@ -256,7 +299,7 @@
 							context.strokeStyle = '#003300';
 							context.stroke();
 						}
-						
+
 					}
 
 				}
@@ -382,13 +425,13 @@
 				}
 
 				let widthSlider = document.getElementById("widthSlider");
-				widthSlider.oninput = function() {
+				widthSlider.onchange = function() {
 					g.width = this.value;
 					canvas.width = g.width * tileWidth;
 				}
 
 				let heightSlider = document.getElementById("heightSlider");
-				heightSlider.oninput = function() {
+				heightSlider.onchange = function() {
 					g.height = this.value;
 					canvas.height = g.height * tileHeight;
 				}
@@ -410,17 +453,28 @@
 		</script>
 	</head>
 	<body style="background: lightblue;">
-		<canvas id="canvas" width="401px" height="401px" oncontextmenu="return false" style="background: white;"></canvas>
-		<div>
-			<button id="resetButton">Reset</button>
-			<button id="wallTileButton">Wall Tile</button>
-			<button id="waterTileButton">Water Tile</button>
-			<button id="selectObjectiveButton">Objective</button>
-		</div>
-		<div>
-			<input type="range" min="1" max="20" value="5" class="slider" id="widthSlider">
-			<input type="range" min="1" max="20" value="5" class="slider" id="heightSlider">
-		</div>
+		<h1>Pathfinding</h1>
+		<section class="nes-container">
+			<div class="containers">
+				<div class="draw nes-container with-title"> 
+					<h2 class="title">Canvas</h2>
+					<canvas id="canvas" width="401px" height="401px" oncontextmenu="return false" style="background: white;"></canvas>
+				</div>
+				<div class="config nes-container with-title">
+					<h2 class="title">Config</h2>
+					<div class="buttons nes-container"> 
+						<button class="nes-btn" id="wallTileButton">Wall Tile</button>
+						<button class="nes-btn" id="waterTileButton">Water Tile</button>
+						<button class="nes-btn" id="selectObjectiveButton">Objective</button>
+						<button class="nes-btn" id="resetButton">Reset</button>
+					</div>
+					<div class="nes-container">
+						<input type="range" min="1" max="20" value=5 id="widthSlider">
+						<input type="range" min="1" max="20" value=5 id="heightSlider">
+					</div>
+				</div>
+			</div>
+		</section>
 
 	</body>
 </html>
