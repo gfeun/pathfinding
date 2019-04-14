@@ -1,0 +1,38 @@
+html, body, pre, code, kbd, samp {
+	font-family:  'Press Start 2P', cursive;
+}
+
+body > h1 {
+	text-align: center;
+}
+
+section {
+	margin: auto;
+	max-width: 1300px;
+	text-align: center;
+}
+
+div.containers {
+	display: flex;
+	flex-flow: row;
+	align-items: center;
+}
+
+div.containers.draw {
+	display: flex;
+	flex-direction: column;
+}
+
+div.containers.config {
+	display: flex;
+	flex-flow: row;
+	flex-direction: column nowrap;
+	align-items: center;
+}
+
+div.buttons {
+	display: flex;
+	flex-direction: row;
+	flex-wrap: wrap;
+	align-items: center;
+}
