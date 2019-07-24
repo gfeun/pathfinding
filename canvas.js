@@ -1,11 +1,12 @@
 class Canvas {
-  constructor (grid, tileWidth, tileHeight) {
+  constructor (grid, tiles, tileWidth, tileHeight) {
     this.canvas = document.getElementById('canvas')
     this.context = this.canvas.getContext('2d')
     this.context.translate(0.5, 0.5)
     this.tileWidth = tileWidth
     this.tileHeight = tileHeight
     this.grid = grid
+    this.tiles = tiles
   }
 
   get grid () {
@@ -17,55 +18,32 @@ class Canvas {
   }
 
   resizeToGrid (gridWidth, gridHeight) {
+    console.log('Grid Width', gridWidth, this.tileWidth)
+    console.log('Grid Height', gridHeight, this.tileHeight)
     this.canvas.width = gridWidth * this.tileWidth
     this.canvas.height = gridHeight * this.tileHeight
   }
 
   drawBoard () {
-    for (var x = 0; x <= this.grid.width; x += 1) {
-      this.context.beginPath()
-      this.context.moveTo(x * this.tileWidth, 0)
-      this.context.lineTo(x * this.tileWidth, this.grid.height * this.tileWidth)
-      this.context.strokeStyle = 'black'
-      this.context.stroke()
-    }
-
-    for (var y = 0; y <= this.grid.height; y += 1) {
-      this.context.beginPath()
-      this.context.moveTo(0, y * this.tileHeight)
-      this.context.lineTo(this.grid.width * this.tileWidth, y * this.tileHeight)
-      this.context.strokeStyle = 'black'
-      this.context.stroke()
+    for (let x = 0; x <= this.grid.width; x += 1) {
+      for (let y = 0; y <= this.grid.width; y += 1) {
+        this.drawTile(this.tiles['grass'], x * this.tileWidth, y * this.tileHeight)
+      }
     }
   }
 
   drawTiles () {
     for (const [x, y] of this.grid.tiles) {
-      this.context.beginPath()
-      this.context.rect(x * this.tileWidth, y * this.tileHeight, this.tileWidth, this.tileHeight)
-      this.context.fillStyle = 'black'
-      this.context.fill()
+      this.drawTile(this.tiles['wood'], x * this.tileWidth, y * this.tileHeight)
     }
   }
 
   drawPlayer (player) {
-    this.context.beginPath()
-    this.context.arc(player.x * this.tileWidth + this.tileWidth / 2, player.y * this.tileHeight + this.tileHeight / 2, this.tileWidth / 2, 0, 2 * Math.PI, false)
-    this.context.fillStyle = 'green'
-    this.context.fill()
-    this.context.lineWidth = 1
-    this.context.strokeStyle = '#003300'
-    this.context.stroke()
+    this.drawTile(this.tiles['hero'], player.x * this.tileWidth, player.y * this.tileHeight)
   }
 
   drawObjective (objective) {
-    this.context.beginPath()
-    this.context.arc(objective.x * this.tileWidth + this.tileWidth / 2, objective.y * this.tileHeight + this.tileHeight / 2, this.tileWidth / 2, 0, 2 * Math.PI, false)
-    this.context.fillStyle = 'yellow'
-    this.context.fill()
-    this.context.lineWidth = 1
-    this.context.strokeStyle = '#003300'
-    this.context.stroke()
+    this.drawTile(this.tiles['copper_mine'], objective.x * this.tileWidth, objective.y * this.tileHeight)
   }
 
   drawArrows (directionMap) {
@@ -130,9 +108,20 @@ class Canvas {
     }
   }
 
+  drawTile (tile, x, y) {
+    if (tile === undefined) {
+      return
+    }
+
+    try {
+      this.context.drawImage(tile, x, y)
+    } catch (error) {
+      console.error(error, tile, x, y)
+    }
+  }
+
   clearCanvas () {
     this.context.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    this.drawBoard()
   }
 }
 

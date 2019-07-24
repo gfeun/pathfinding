@@ -1,7 +1,7 @@
 class Grid {
   constructor (width, height) {
-    this.width = width
-    this.height = height
+    this._width = width
+    this._height = height
     this._tiles = (function (width, height) {
       const t = new Array(width)
       for (let x = 0; x < width; x += 1) {
@@ -12,6 +12,22 @@ class Grid {
       }
       return t
     })(this.width, this.height)
+  }
+
+  get width () {
+    return this._width
+  }
+
+  set width (w) {
+    this._width = w
+  }
+
+  get height () {
+    return this._height
+  }
+
+  set height (h) {
+    this._height = h
   }
 
   get tiles () {
@@ -38,6 +54,26 @@ class Grid {
     results = results.filter(this.inBounds, this)
     results = results.filter(this.passable, this)
     return results
+  }
+
+  breadthFirstSearch (startPos) {
+    const frontier = new Queue()
+    frontier.put(startPos)
+    const cameFrom = { source: [], dest: [] }
+    cameFrom.source.push(startPos)
+    cameFrom.dest.push(startPos)
+
+    while (!frontier.empty()) {
+      const current = frontier.get()
+      for (const next of this.neighbors(current)) {
+        if (!(isIn2dArray(cameFrom.dest, next)) && !(isIn2dArray(this.tiles, next))) {
+          frontier.put(next)
+          cameFrom.source.push(current)
+          cameFrom.dest.push(next)
+        }
+      }
+    }
+    return cameFrom
   }
 
   draw () {
@@ -80,23 +116,4 @@ function isIn2dArray (arr, val) {
   return false
 }
 
-function breadthFirstSearch (graph, startPos) {
-  const frontier = new Queue()
-  frontier.put(startPos)
-  const cameFrom = { source: [], dest: [] }
-  cameFrom.source.push(startPos)
-  cameFrom.dest.push(startPos)
-
-  while (!frontier.empty()) {
-    const current = frontier.get()
-    for (const next of graph.neighbors(current)) {
-      if (!(isIn2dArray(cameFrom.dest, next)) && !(isIn2dArray(graph.tiles, next))) {
-        frontier.put(next)
-        cameFrom.source.push(current)
-        cameFrom.dest.push(next)
-      }
-    }
-  }
-  return cameFrom
-}
-export { Grid, Queue, breadthFirstSearch }
+export { Grid }
