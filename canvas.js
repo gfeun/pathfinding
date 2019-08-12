@@ -33,8 +33,12 @@ class Canvas {
   }
 
   drawTiles () {
-    for (const [x, y] of this.grid.tiles) {
-      this.drawTile(this.tiles['wood'], x * this.tileWidth, y * this.tileHeight)
+    for (let i = 0; i < this.grid.tiles.length; i++) {
+      for (let j = 0; j < this.grid.tiles[i].length; j++) {
+        if (this.grid.tiles[i][j]) {
+          this.drawTile(this.tiles['wood'], i * this.tileWidth, j * this.tileHeight)
+        }
+      }
     }
   }
 
@@ -46,64 +50,59 @@ class Canvas {
     this.drawTile(this.tiles['copper_mine'], objective.x * this.tileWidth, objective.y * this.tileHeight)
   }
 
+  // todo: fix inconsistencies between canvas position and grid position
+  //
+  // x and y are in grid positions
+  drawHorizontalLine (x, y) {
+    this.context.beginPath()
+    this.context.moveTo(x * this.tileWidth + this.tileWidth / 4, y * this.tileHeight + this.tileHeight / 2)
+    this.context.lineTo(x * this.tileWidth + 3 * this.tileWidth / 4, y * this.tileHeight + this.tileHeight / 2)
+    this.context.strokeStyle = 'black'
+    this.context.stroke()
+  }
+
+  // x and y are in grid positions
+  drawVerticalLine (x, y) {
+    this.context.beginPath()
+    this.context.moveTo(x * this.tileWidth + this.tileWidth / 2, y * this.tileHeight + this.tileHeight / 4)
+    this.context.lineTo(x * this.tileWidth + this.tileWidth / 2, y * this.tileHeight + 3 * this.tileHeight / 4)
+    this.context.strokeStyle = 'black'
+    this.context.stroke()
+  }
+
+  // x and y are in canvas position
+  drawCircle (x, y) {
+    this.context.beginPath()
+    this.context.arc(x, y, this.tileWidth / 8, 0, 2 * Math.PI, false)
+    this.context.fillStyle = 'orange'
+    this.context.fill()
+    this.context.lineWidth = 1
+    this.context.strokeStyle = '#003300'
+    this.context.stroke()
+  }
+
   drawArrows (directionMap) {
-    for (let i = 0; i < directionMap.dest.length; i++) {
-      if (directionMap.source[i][0] < directionMap.dest[i][0]) {
-        this.context.beginPath()
-        this.context.moveTo(directionMap.dest[i][0] * this.tileWidth + this.tileWidth / 4, directionMap.dest[i][1] * this.tileHeight + this.tileHeight / 2)
-        this.context.lineTo(directionMap.dest[i][0] * this.tileWidth + 3 * this.tileWidth / 4, directionMap.dest[i][1] * this.tileHeight + this.tileHeight / 2)
-        this.context.strokeStyle = 'black'
-        this.context.stroke()
+    for (let i = 0; i < directionMap.length; i++) {
+      for (let j = 0; j < directionMap[i].length; j++) {
+        if (typeof directionMap[i][j] === 'undefined') {
+          continue
+        }
+        const nextX = directionMap[i][j].x
+        const nextY = directionMap[i][j].y
 
-        this.context.beginPath()
-        this.context.arc(directionMap.dest[i][0] * this.tileWidth + this.tileWidth / 2 - this.tileWidth / 4, directionMap.dest[i][1] * this.tileHeight + this.tileHeight / 2, this.tileWidth / 8, 0, 2 * Math.PI, false)
-        this.context.fillStyle = 'orange'
-        this.context.fill()
-        this.context.lineWidth = 1
-        this.context.strokeStyle = '#003300'
-        this.context.stroke()
-      } else if (directionMap.source[i][0] > directionMap.dest[i][0]) {
-        this.context.beginPath()
-        this.context.moveTo(directionMap.dest[i][0] * this.tileWidth + this.tileWidth / 4, directionMap.dest[i][1] * this.tileHeight + this.tileHeight / 2)
-        this.context.lineTo(directionMap.dest[i][0] * this.tileWidth + 3 * this.tileWidth / 4, directionMap.dest[i][1] * this.tileHeight + this.tileHeight / 2)
-        this.context.strokeStyle = 'black'
-        this.context.stroke()
-
-        this.context.beginPath()
-        this.context.arc(directionMap.dest[i][0] * this.tileWidth + this.tileWidth / 2 + this.tileWidth / 4, directionMap.dest[i][1] * this.tileHeight + this.tileHeight / 2, this.tileWidth / 8, 0, 2 * Math.PI, false)
-        this.context.fillStyle = 'orange'
-        this.context.fill()
-        this.context.lineWidth = 1
-        this.context.strokeStyle = '#003300'
-        this.context.stroke()
-      } else if (directionMap.source[i][1] < directionMap.dest[i][1]) {
-        this.context.beginPath()
-        this.context.moveTo(directionMap.dest[i][0] * this.tileWidth + this.tileWidth / 2, directionMap.dest[i][1] * this.tileHeight + this.tileHeight / 4)
-        this.context.lineTo(directionMap.dest[i][0] * this.tileWidth + this.tileWidth / 2, directionMap.dest[i][1] * this.tileHeight + 3 * this.tileHeight / 4)
-        this.context.strokeStyle = 'black'
-        this.context.stroke()
-
-        this.context.beginPath()
-        this.context.arc(directionMap.dest[i][0] * this.tileWidth + this.tileWidth / 2, directionMap.dest[i][1] * this.tileHeight + this.tileHeight / 2 - this.tileHeight / 4, this.tileWidth / 8, 0, 2 * Math.PI, false)
-        this.context.fillStyle = 'orange'
-        this.context.fill()
-        this.context.lineWidth = 1
-        this.context.strokeStyle = '#003300'
-        this.context.stroke()
-      } else if (directionMap.source[i][1] > directionMap.dest[i][1]) {
-        this.context.beginPath()
-        this.context.moveTo(directionMap.dest[i][0] * this.tileWidth + this.tileWidth / 2, directionMap.dest[i][1] * this.tileHeight + this.tileHeight / 4)
-        this.context.lineTo(directionMap.dest[i][0] * this.tileWidth + this.tileWidth / 2, directionMap.dest[i][1] * this.tileHeight + 3 * this.tileHeight / 4)
-        this.context.strokeStyle = 'black'
-        this.context.stroke()
-
-        this.context.beginPath()
-        this.context.arc(directionMap.dest[i][0] * this.tileWidth + this.tileWidth / 2, directionMap.dest[i][1] * this.tileHeight + this.tileHeight / 2 + this.tileHeight / 4, this.tileWidth / 8, 0, 2 * Math.PI, false)
-        this.context.fillStyle = 'orange'
-        this.context.fill()
-        this.context.lineWidth = 1
-        this.context.strokeStyle = '#003300'
-        this.context.stroke()
+        if (i < nextX) {
+          this.drawHorizontalLine(i, j)
+          this.drawCircle(i * this.tileWidth + this.tileWidth / 2 - this.tileWidth / 4, j * this.tileHeight + this.tileHeight / 2)
+        } else if (i > nextX) {
+          this.drawHorizontalLine(i, j)
+          this.drawCircle(i * this.tileWidth + this.tileWidth / 2 + this.tileWidth / 4, j * this.tileHeight + this.tileHeight / 2)
+        } else if (j < nextY) {
+          this.drawVerticalLine(i, j)
+          this.drawCircle(i * this.tileWidth + this.tileWidth / 2, j * this.tileHeight + this.tileHeight / 2 - this.tileHeight / 4)
+        } else if (j > nextY) {
+          this.drawVerticalLine(i, j)
+          this.drawCircle(i * this.tileWidth + this.tileWidth / 2, j * this.tileHeight + this.tileHeight / 2 + this.tileHeight / 4)
+        }
       }
     }
   }

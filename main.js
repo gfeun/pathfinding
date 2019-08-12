@@ -49,10 +49,10 @@ window.onload = function () {
     // console.log(mousePos);
     const { x, y } = canvasToGrid(mousePos.x, mousePos.y)
     if (!((x === player.x && y === player.y) || (x === objective.x && y === objective.y))) {
-      g.tiles.push([x, y])
+      g.tiles[x][y] = true
     }
 
-    directionMap = g.breadthFirstSearch([objective.x, objective.y])
+    directionMap = g.playerToObjective(player, objective)
   }
 
   function eraseOnMouseClick (event) {
@@ -61,16 +61,16 @@ window.onload = function () {
     // console.log(mousePos);
 
     const { x, y } = canvasToGrid(mousePos.x, mousePos.y)
-    g.tiles = g.tiles.filter((t) => !((t[0] === x) && (t[1] === y)))
+    g.tiles[x][y] = false
 
-    directionMap = g.breadthFirstSearch([objective.x, objective.y])
+    directionMap = g.playerToObjective(player, objective)
   }
 
   function placeObjective (event) {
     const mousePos = getMousePos(canvas, event)
     objective = canvasToGrid(mousePos.x, mousePos.y)
 
-    directionMap = g.breadthFirstSearch([objective.x, objective.y])
+    directionMap = g.playerToObjective(player, objective)
   }
 
   canvas.addEventListener('mousedown', function (event) {
@@ -112,8 +112,8 @@ window.onload = function () {
   }
 
   function reset () {
-    g.tiles = []
-    directionMap = g.breadthFirstSearch([objective.x, objective.y])
+    g.resetTiles()
+    directionMap = g.playerToObjective(player, objective)
   }
 
   var clearCanvasButton = document.getElementById('resetButton')
@@ -158,6 +158,17 @@ window.onload = function () {
   }, false)
 
   function update () {
+    if ((objective.x === player.x) && (objective.y === player.y)) {
+      return
+    }
+
+    const futurePos = directionMap[player.x][player.y]
+    if (futurePos === undefined) {
+      return
+    }
+
+    player.x = futurePos.x
+    player.y = futurePos.y
   }
 
   function render () {
@@ -184,9 +195,9 @@ window.onload = function () {
   c.resizeToGrid(g.width, g.height)
 
   // g.draw()
-  var directionMap = g.breadthFirstSearch([5, 5])
+  var directionMap = g.playerToObjective(player, objective)
 
   render()
-  setInterval(render, 1000 / 30)
+  setInterval(render, 1000 / 10)
   setInterval(update, 1000)
 }
