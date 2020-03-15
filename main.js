@@ -1,6 +1,6 @@
 import { Grid } from './pathfinding.js'
 import { Canvas } from './canvas.js'
-import { images, tiles } from './images.js'
+import { tiles } from './images.js'
 
 window.onload = function () {
 // Box width
@@ -13,9 +13,8 @@ window.onload = function () {
 
   var leftClickAction = fillOnMouseMove
   var rightClickAction = eraseOnMouseClick
-  var tileType = 'black'
 
-  var g = new Grid(10, 10)
+  var g = new Grid(8, 8)
   //  g.tiles = [[2, 0], [2, 2]]
 
   var c = new Canvas(g, tiles, tileWidth, tileHeight)
@@ -44,9 +43,7 @@ window.onload = function () {
   }
 
   function fillOnMouseMove (event) {
-  // console.log(event);
     const mousePos = getMousePos(canvas, event)
-    // console.log(mousePos);
     const { x, y } = canvasToGrid(mousePos.x, mousePos.y)
     if (!((x === player.x && y === player.y) || (x === objective.x && y === objective.y))) {
       g.tiles[x][y] = true
@@ -56,9 +53,7 @@ window.onload = function () {
   }
 
   function eraseOnMouseClick (event) {
-  // console.log(event);
     const mousePos = getMousePos(canvas, event)
-    // console.log(mousePos);
 
     const { x, y } = canvasToGrid(mousePos.x, mousePos.y)
     g.tiles[x][y] = false
@@ -99,12 +94,10 @@ window.onload = function () {
 
   function selectWallTile () {
     leftClickAction = fillOnMouseMove
-    tileType = 'brown'
   }
 
   function selectWaterTile () {
     leftClickAction = fillOnMouseMove
-    tileType = 'blue'
   }
 
   function selectObjective () {

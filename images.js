@@ -2,9 +2,9 @@ var images = []
 var tiles = {}
 var tilesheet = new Image()
 
-//var generateImageBitmap = async function (imageData) {
+// var generateImageBitmap = async function (imageData) {
 //  return createImageBitmap(imageData)
-//}
+// }
 
 var loadImages = async function () {
   const canvas = document.createElement('canvas')
