@@ -1,0 +1,38 @@
+{
+  "name": "pathfinding",
+  "version": "1.0.0",
+  "description": "",
+  "main": "src/main.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "parcel index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gfeun/pathfinding.git"
+  },
+  "author": "gfeun",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gfeun/pathfinding/issues"
+  },
+  "homepage": "https://github.com/gfeun/pathfinding#readme",
+  "devDependencies": {
+    "babel-types": "^6.26.0",
+    "eslint": "^6.0.1",
+    "eslint-config-standard": "^13.0.0",
+    "eslint-plugin-import": "^2.18.0",
+    "eslint-plugin-node": "^9.1.0",
+    "eslint-plugin-promise": "^4.2.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "prettier": "2.0.5",
+    "typescript": "^3.9.2"
+  },
+  "dependencies": {
+    "nes.css": "^2.3.0",
+    "parcel-bundler": "^1.12.4"
+  },
+  "browserslist": [
+    "last 1 Chrome version"
+  ]
+}

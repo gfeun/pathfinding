@@ -1,4 +1,11 @@
 class Canvas {
+  canvas;
+  context;
+  tileWidth;
+  tileHeight;
+  tiles;
+  _grid;
+
   constructor (grid, tiles, tileWidth, tileHeight) {
     this.canvas = document.getElementById('canvas')
     this.context = this.canvas.getContext('2d')

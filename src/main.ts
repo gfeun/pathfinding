@@ -1,8 +1,9 @@
-import { Grid } from './pathfinding.js'
-import { Canvas } from './canvas.js'
-import { tiles } from './images.js'
+import { Grid } from './pathfinding'
+import { Canvas } from './canvas'
+import { tiles } from './images'
 
 window.onload = function () {
+//let test = function () {
 // Box width
   var bw = 768
   // Box height
@@ -18,6 +19,7 @@ window.onload = function () {
   //  g.tiles = [[2, 0], [2, 2]]
 
   var c = new Canvas(g, tiles, tileWidth, tileHeight)
+
   var canvas = c.canvas
 
   var player = {
@@ -166,22 +168,22 @@ window.onload = function () {
 
   function render () {
     c.clearCanvas()
-    c.drawBoard(g)
-    c.drawTiles(g)
+    c.drawBoard()
+    c.drawTiles()
     c.drawObjective(objective)
     c.drawArrows(directionMap)
     c.drawPlayer(player)
   }
 
   const widthSlider = document.getElementById('widthSlider')
-  widthSlider.onchange = function () {
-    g.width = this.value
+  widthSlider.onchange = function (e: Event) {
+    g.width = (e.target as HTMLInputElement).value
     c.resizeToGrid(g.width, g.height)
   }
 
   const heightSlider = document.getElementById('heightSlider')
-  heightSlider.onchange = function () {
-    g.height = this.value
+  heightSlider.onchange = function (e) {
+    g.height = (e.target as HTMLInputElement).value
     c.resizeToGrid(g.width, g.height)
   }
 
@@ -194,3 +196,5 @@ window.onload = function () {
   setInterval(render, 1000 / 10)
   setInterval(update, 1000)
 }
+
+window.setTimeout(test, 5000)
